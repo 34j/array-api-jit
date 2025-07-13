@@ -26,6 +26,9 @@ classifiers = [
 ]
 
 dependencies = [
+    "array-api-compat>=1.11.2",
+    "cm-time>=0.1.2",
+    "frozendict>=2.4.6",
 ]
 urls."Bug Tracker" = "https://github.com/34j/array-api-jit/issues"
 urls.Changelog = "https://github.com/34j/array-api-jit/blob/main/CHANGELOG.md"
@@ -34,8 +37,11 @@ urls.repository = "https://github.com/34j/array-api-jit"
 
 [dependency-groups]
 dev = [
+  "jax>=0.4.30",
+  "numba>=0.60.0",
   "pytest>=8,<9",
   "pytest-cov>=6,<7",
+  "torch>=2.7.1",
 ]
 docs = [
   "furo>=2023.5.20; python_version>='3.11'",
@@ -45,7 +51,7 @@ docs = [
 ]
 
 [tool.ruff]
-line-length = 88
+line-length = 100
 lint.select = [
   "B",   # flake8-bugbear
   "D",   # flake8-docstrings
@@ -83,9 +89,6 @@ lint.isort.known-first-party = [ "array_api_jit", "tests" ]
 addopts = """\
     -v
     -Wdefault
-    --cov=array_api_jit
-    --cov-report=term
-    --cov-report=xml
     """
 pythonpath = [ "src" ]
 
