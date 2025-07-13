@@ -7,7 +7,7 @@ from cm_time import timer
 from numba import prange
 from numba.extending import overload
 
-from array_api_jit.main import jit
+from array_api_jit import jit
 
 
 @overload(np.stack)
