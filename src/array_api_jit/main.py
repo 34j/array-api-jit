@@ -102,10 +102,10 @@ def jit(
     >>> from array_api_jit import jit
     >>> from array_api_compat import array_namespace
     >>> from typing import Any
-    >>> import numpy as np
+    >>> import numba
     >>> @jit(
-    ...     {"numpy": numba.jit()}, # numba.jit is not used by default
-    ...     decorator_kwargs={"jax": {"static_argnames": ["n"]}}, # jax requires static_argnames
+    ...     {"numpy": numba.jit()},  # numba.jit is not used by default
+    ...     decorator_kwargs={"jax": {"static_argnames": ["n"]}},  # jax requires static_argnames
     ... )
     ... def sin_n_times(x: Any, n: int) -> Any:
     ...     xp = array_namespace(x)

@@ -51,6 +51,7 @@ docs = [
 ]
 
 [tool.ruff]
+format.docstring-code-format = true
 line-length = 100
 lint.select = [
   "B",   # flake8-bugbear
