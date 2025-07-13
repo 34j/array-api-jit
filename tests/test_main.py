@@ -1,13 +1,18 @@
+from os import environ
+from sys import platform
 from typing import Any
 
 import numba
 import numpy as np
+import pytest
 from array_api_compat import array_namespace
 from cm_time import timer
 from numba import prange
 from numba.extending import overload
 
 from array_api_jit import jit
+
+IS_CI = environ.get("CI", "false").lower() in ("true", "1", "yes")
 
 
 @overload(np.stack)
@@ -95,6 +100,9 @@ legendre_jit = jit(
 legendre_assign_jit = jit({"numpy": numba.jit(nogil=True, parallel=True)})(legendre_assign)
 
 
+@pytest.mark.skipif(
+    IS_CI and platform != "linux", reason="Compiler not available on GitHub Actions"
+)
 def test_jit(xp: Any) -> None:
     t = {}
     for name, func in [("nojit", legendre), ("jit", legendre_jit)] + (
