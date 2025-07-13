@@ -4,7 +4,7 @@ requires = [ "setuptools" ]
 
 [project]
 name = "array-api-jit"
-version = "0.0.0"
+version = "0.1.0"
 description = "JIT decorator supporting multiple array API compatible libraries"
 readme = "README.md"
 license = { text = "MIT" }
