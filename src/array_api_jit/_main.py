@@ -1,10 +1,10 @@
 # https://github.com/search?q=gumerov+translation+language%3APython&type=code&l=Python
 import importlib.util
 import warnings
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from functools import cache, wraps
 from types import ModuleType
-from typing import Any, Callable, ParamSpec, TypeVar
+from typing import Any, ParamSpec, TypeVar
 
 from array_api_compat import (
     array_namespace,
