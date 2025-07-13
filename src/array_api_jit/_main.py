@@ -30,6 +30,10 @@ if importlib.util.find_spec("numba"):
 
 P = ParamSpec("P")
 T = TypeVar("T")
+Pin = ParamSpec("Pin")
+Tin = TypeVar("Tin")
+Pinner = ParamSpec("Pinner")
+Tinner = TypeVar("Tinner")
 STR_TO_IS_NAMESPACE = {
     "numpy": is_numpy_namespace,
     "jax": is_jax_namespace,
@@ -63,8 +67,11 @@ def _default_decorator(
         return getattr(module, "jit", lambda x: x)
 
 
+Decorator = Callable[[Callable[Pin, Tin]], Callable[Pin, Tin]]
+
+
 def jit(
-    decorator: Mapping[str, Callable[[Callable[P, T]], Callable[P, T]]] | None = None,
+    decorator: Mapping[str, Decorator[..., Any]] | None = None,
     /,
     *,
     fail_on_error: bool = False,
@@ -115,13 +122,13 @@ def jit(
 
     """
 
-    def new_decorator(f: Callable[P, T]) -> Callable[P, T]:
+    def new_decorator(f: Callable[Pinner, Tinner]) -> Callable[Pinner, Tinner]:
         decorator_args_ = frozendict(decorator_args or {})
         decorator_kwargs_ = frozendict(decorator_kwargs or {})
         decorator_ = decorator or {}
 
         @cache
-        def jit_cached(xp: ModuleType) -> Callable[P, T]:
+        def jit_cached(xp: ModuleType) -> Callable[Pinner, Tinner]:
             for name_, is_namespace in STR_TO_IS_NAMESPACE.items():
                 if is_namespace(xp):
                     name = name_
@@ -146,7 +153,7 @@ def jit(
                 return f
 
         @wraps(f)
-        def inner(*args_inner: P.args, **kwargs_inner: P.kwargs) -> T:
+        def inner(*args_inner: Pinner.args, **kwargs_inner: Pinner.kwargs) -> Tinner:
             try:
                 xp = array_namespace(*args_inner)
             except TypeError as e:

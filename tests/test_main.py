@@ -109,7 +109,7 @@ def test_jit(xp: Any) -> None:
         for i in range(20):
             with timer() as timer_:
                 x = xp.arange(1000000, dtype=xp.float32)
-                p = func(x, 10)  # type: ignore
+                p = func(x, 10)
                 assert p.shape == (1000000, 10)
             t[name] = timer_.elapsed
             if i == 0:
