@@ -46,12 +46,12 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "array-api-compat" },
-    { name = "cm-time" },
     { name = "frozendict" },
 ]
 
 [package.dev-dependencies]
 dev = [
+    { name = "cm-time" },
     { name = "jax" },
     { name = "numba" },
     { name = "pytest" },
@@ -68,12 +68,12 @@ docs = [
 [package.metadata]
 requires-dist = [
     { name = "array-api-compat", specifier = ">=1.11.2" },
-    { name = "cm-time", specifier = ">=0.1.2" },
     { name = "frozendict", specifier = ">=2.4.6" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "cm-time", specifier = ">=0.1.2" },
     { name = "jax", specifier = ">=0.4.30" },
     { name = "numba", specifier = ">=0.60.0" },
     { name = "pytest", specifier = ">=8,<9" },
