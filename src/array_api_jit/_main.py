@@ -1,4 +1,3 @@
-# https://github.com/search?q=gumerov+translation+language%3APython&type=code&l=Python
 import importlib.util
 import warnings
 from collections.abc import Callable, Mapping, Sequence
@@ -14,7 +13,6 @@ from array_api_compat import (
     is_numpy_namespace,
     is_torch_namespace,
 )
-from frozendict import frozendict
 
 if importlib.util.find_spec("numba"):
     import numpy as np
@@ -123,8 +121,8 @@ def jit(
     """
 
     def new_decorator(f: Callable[Pinner, Tinner]) -> Callable[Pinner, Tinner]:
-        decorator_args_ = frozendict(decorator_args or {})
-        decorator_kwargs_ = frozendict(decorator_kwargs or {})
+        decorator_args_ = decorator_args or {}
+        decorator_kwargs_ = decorator_kwargs or {}
         decorator_ = decorator or {}
 
         @cache
