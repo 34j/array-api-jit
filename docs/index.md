@@ -13,14 +13,13 @@ usage
 :maxdepth: 2
 
 changelog
-contributing
 ```
 
 ```{toctree}
 :caption: API Reference
 :maxdepth: 2
 
-array_api_jit
+modules
 ```
 
 ```{include} ../README.md

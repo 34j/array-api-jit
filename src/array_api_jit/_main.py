@@ -19,8 +19,8 @@ if importlib.util.find_spec("numba"):
     from numba.extending import overload
 
     @overload(array_namespace)
-    def _array_namespace_overload(*args: Any) -> Any:
-        def inner(*args: Any) -> Any:
+    def _array_namespace_overload(*_args: Any) -> Any:
+        def inner(*_args: Any) -> Any:
             return np
 
         return inner
@@ -41,34 +41,40 @@ STR_TO_IS_NAMESPACE = {
 }
 
 
+def _identity(  # noqa: UP047
+    f: Callable[P, T],
+    /,
+) -> Callable[P, T]:
+    return f
+
+
 def _default_decorator(
     module: ModuleType,
     /,
 ) -> Callable[[Callable[P, T]], Callable[P, T]]:
     if is_jax_namespace(module):
-        import jax
+        import jax  # noqa: PLC0415
 
         return jax.jit
-    elif is_numpy_namespace(module) or is_cupy_namespace(module):
+    if is_numpy_namespace(module) or is_cupy_namespace(module):
         # import numba
 
         # return numba.jit()
         # The success rate of numba.jit is low
-        return lambda x: x
-    elif is_torch_namespace(module):
-        import torch
+        return _identity
+    if is_torch_namespace(module):
+        import torch  # noqa: PLC0415
 
         return torch.compile
-    elif is_dask_namespace(module):
-        return lambda x: x
-    else:
-        return getattr(module, "jit", lambda x: x)
+    if is_dask_namespace(module):
+        return _identity
+    return getattr(module, "jit", _identity)
 
 
 Decorator = Callable[[Callable[Pin, Tin]], Callable[Pin, Tin]]
 
 
-def jit(
+def jit(  # noqa: C901
     decorator: Mapping[str, Decorator[..., Any]] | None = None,
     /,
     *,
@@ -120,7 +126,9 @@ def jit(
 
     """
 
-    def new_decorator(f: Callable[Pinner, Tinner]) -> Callable[Pinner, Tinner]:
+    def new_decorator(  # noqa: C901
+        f: Callable[Pinner, Tinner],
+    ) -> Callable[Pinner, Tinner]:
         decorator_args_ = decorator_args or {}
         decorator_kwargs_ = decorator_kwargs or {}
         decorator_ = decorator or {}
@@ -130,14 +138,10 @@ def jit(
             for name_, is_namespace in STR_TO_IS_NAMESPACE.items():
                 if is_namespace(xp):
                     name = name_
-            else:
-                name = xp.__name__.split(".")[0]
+            name = xp.__name__.split(".")[0]
             decorator_args__ = decorator_args_.get(name, ())
             decorator_kwargs__ = decorator_kwargs_.get(name, {})
-            if name in decorator_:
-                decorator_current = decorator_[name]
-            else:
-                decorator_current = _default_decorator(xp)
+            decorator_current = decorator_[name] if name in decorator_ else _default_decorator(xp)
             try:
                 return decorator_current(f, *decorator_args__, **decorator_kwargs__)
             except Exception as e:

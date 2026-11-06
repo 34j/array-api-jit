@@ -12,7 +12,7 @@ from numba.extending import overload
 
 from array_api_jit import jit
 
-IS_CI = environ.get("CI", "false").lower() in ("true", "1", "yes")
+IS_CI = environ.get("CI", "false").lower() in {"true", "1", "yes"}
 
 
 @overload(np.stack)
@@ -104,7 +104,7 @@ legendre_assign_jit = jit({"numpy": numba.jit(nogil=True, parallel=True)})(legen
     IS_CI and platform != "linux", reason="Compiler not available on GitHub Actions"
 )
 def test_jit(xp: Any) -> None:
-    t = {}
+    t: dict[str, float] = {}
     for name, func in [("nojit", legendre), ("jit", legendre_jit)] + (
         [
             ("assign-nojit", legendre_assign),
@@ -113,16 +113,13 @@ def test_jit(xp: Any) -> None:
         if "jax" not in xp.__name__
         else []
     ):
-        print(xp.__name__, name)
-        for i in range(20):
+        for _ in range(20):
             with timer() as timer_:
                 x = xp.arange(1000000, dtype=xp.float32) / 1000000
                 p = func(x, 10)
                 assert p.shape == (1000000, 10)
+            assert timer_.elapsed is not None
             t[name] = timer_.elapsed
-            if i == 0:
-                print(f"First call: {timer_.elapsed:g}s")
-        print(f"Last call: {timer_.elapsed:g}s")
     if "numpy" not in xp.__name__:
         assert t["jit"] < t["nojit"], (
             f"JIT time {t['jit']} should be less than non-JIT time {t['nojit']}"

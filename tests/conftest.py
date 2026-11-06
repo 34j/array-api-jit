@@ -5,14 +5,30 @@ import pytest
 
 @pytest.fixture(scope="session", params=["numpy", "torch", "jax"])
 def xp(request: pytest.FixtureRequest) -> Any:
-    """Get the array namespace for the given backend."""
+    """Get the array namespace for the given backend.
+
+    Returns
+    -------
+    Any
+        The selected array namespace.
+
+    Raises
+    ------
+    ValueError
+        If the requested backend is unknown.
+
+    """
     backend = request.param
     if backend == "numpy":
-        import numpy as xp
-    elif backend == "torch":
-        import torch as xp
-    elif backend == "jax":
-        import jax.numpy as xp
-    else:
-        raise ValueError(f"Unknown backend: {backend}")
-    return xp
+        import numpy as np  # noqa: PLC0415
+
+        return np
+    if backend == "torch":
+        import torch as xp  # noqa: PLC0415
+
+        return xp
+    if backend == "jax":
+        import jax.numpy as xp  # noqa: PLC0415
+
+        return xp
+    raise ValueError(f"Unknown backend: {backend}")
