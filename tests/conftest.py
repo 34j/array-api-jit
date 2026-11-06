@@ -20,15 +20,15 @@ def xp(request: pytest.FixtureRequest) -> Any:
     """
     backend = request.param
     if backend == "numpy":
-        import numpy as np  # noqa: PLC0415
+        import numpy as np
 
         return np
     if backend == "torch":
-        import torch as xp  # noqa: PLC0415
+        import torch as xp
 
         return xp
     if backend == "jax":
-        import jax.numpy as xp  # noqa: PLC0415
+        import jax.numpy as xp
 
         return xp
     raise ValueError(f"Unknown backend: {backend}")

@@ -38,13 +38,59 @@ dev = [
   "numba>=0.60",
   "packaging-34j[test]",
   "torch>=2.7.1",
+  "ty>=0.0.99",
 ]
 docs = [
   "packaging-34j[docs]",
 ]
 
 [tool.ruff]
-extend = ".venv/ruff.toml"
+line-length = 100
+preview = true
+format.docstring-code-format = true
+lint.select = [ "ALL" ]
+lint.ignore = [
+  "ANN401",
+  "COM812",
+  "CPY",
+  "D100",
+  "D104",
+  "D203",
+  "D211",
+  "D212",
+  "D213",
+  "EM",
+  "ERA",
+  "FIX002",
+  "ISC001",
+  "PGH004",
+  "PLR09",
+  "TC003",
+  "TD002",
+  "TD003",
+  "TRY003",
+]
+lint.extend-per-file-ignores."/**/docs/conf.py" = [
+  "A001",
+  "INP001",
+]
+lint.extend-per-file-ignores."/**/src/**/*" = [
+  "C901",
+  "PLC0415",
+]
+lint.extend-per-file-ignores."/**/tests/**/*" = [
+  "ANN",
+  "ARG",
+  "D",
+  "FBT",
+  "PLC0415",
+  "PLR2004",
+  "RUF005",
+  "S101",
+  "S311",
+]
+lint.fixable = [ "ALL" ]
+lint.dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [tool.pyproject-fmt]
 max_supported_python = "3.14"

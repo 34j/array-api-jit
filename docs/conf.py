@@ -13,7 +13,7 @@ from sphinx.ext import apidoc
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "array API JIT"
-copyright = "2025, 34j"  # noqa: A001
+copyright = "2025, 34j"
 author = "34j"
 release = "1.0.0"
 

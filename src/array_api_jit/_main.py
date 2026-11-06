@@ -41,7 +41,7 @@ STR_TO_IS_NAMESPACE = {
 }
 
 
-def _identity(  # noqa: UP047
+def _identity[**P, T](
     f: Callable[P, T],
     /,
 ) -> Callable[P, T]:
@@ -53,7 +53,7 @@ def _default_decorator(
     /,
 ) -> Callable[[Callable[P, T]], Callable[P, T]]:
     if is_jax_namespace(module):
-        import jax  # noqa: PLC0415
+        import jax
 
         return jax.jit
     if is_numpy_namespace(module) or is_cupy_namespace(module):
@@ -63,7 +63,7 @@ def _default_decorator(
         # The success rate of numba.jit is low
         return _identity
     if is_torch_namespace(module):
-        import torch  # noqa: PLC0415
+        import torch
 
         return torch.compile
     if is_dask_namespace(module):
@@ -74,7 +74,7 @@ def _default_decorator(
 Decorator = Callable[[Callable[Pin, Tin]], Callable[Pin, Tin]]
 
 
-def jit(  # noqa: C901
+def jit(
     decorator: Mapping[str, Decorator[..., Any]] | None = None,
     /,
     *,
@@ -126,7 +126,7 @@ def jit(  # noqa: C901
 
     """
 
-    def new_decorator(  # noqa: C901
+    def new_decorator(
         f: Callable[Pinner, Tinner],
     ) -> Callable[Pinner, Tinner]:
         decorator_args_ = decorator_args or {}

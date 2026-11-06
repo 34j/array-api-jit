@@ -19,12 +19,12 @@ IS_CI = environ.get("CI", "false").lower() in {"true", "1", "yes"}
 def stack(arrays, axis=0):
     def inner(arrays, axis=0):
         if axis == 0:
-            shape = (len(arrays),) + arrays[0].shape  # noqa: RUF005
+            shape = (len(arrays),) + arrays[0].shape
             stacked_array = np.empty(shape, dtype=arrays[0].dtype)
             for j in prange(len(arrays)):
                 stacked_array[j] = arrays[j]
         elif axis == -1:
-            shape = arrays[0].shape + (len(arrays),)  # noqa: RUF005
+            shape = arrays[0].shape + (len(arrays),)
             stacked_array = np.empty(shape, dtype=arrays[0].dtype)
             for j in prange(len(arrays)):
                 stacked_array[..., j] = arrays[j]
