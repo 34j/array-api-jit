@@ -1,9 +1,23 @@
+import shutil
 from typing import Any
 
 import pytest
 
 
-@pytest.fixture(scope="session", params=["numpy", "torch", "jax"])
+@pytest.fixture(
+    scope="session",
+    params=[
+        "numpy",
+        pytest.param(
+            "torch",
+            marks=pytest.mark.skipif(
+                shutil.which("g++") is None,
+                reason="Torch JIT requires a C++ compiler",
+            ),
+        ),
+        "jax",
+    ],
+)
 def xp(request: pytest.FixtureRequest) -> Any:
     """Get the array namespace for the given backend.
 
