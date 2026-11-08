@@ -53,6 +53,8 @@ pip install array-api-jit
 Simply decorate your function with `@jit()`:
 
 ```python
+from typing import Any
+
 from array_api_jit import jit
 
 
