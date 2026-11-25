@@ -33,7 +33,7 @@ urls.repository = "https://github.com/34j/array-api-jit"
 
 [dependency-groups]
 dev = [
-  "cm-time>=0.1.2",
+  "cm-time>=1.0.2",
   "jax>=0.4.30",
   "numba>=0.60",
   "packaging-34j[test]>=1.1.8",
